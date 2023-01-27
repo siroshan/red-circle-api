@@ -11,4 +11,6 @@ export class CreateProductDto {
   volume: number;
   @IsNumber()
   price: number;
+  @IsString()
+  image: string;
 }

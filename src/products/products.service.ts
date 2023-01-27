@@ -7,8 +7,10 @@ import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  @InjectRepository(Product)
-  private readonly productRepository: Repository<Product>;
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const newProduct: Product = this.productRepository.create(createProductDto);
@@ -23,8 +25,8 @@ export class ProductsService {
     return await this.productRepository.findOneBy({ id });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(updateProductDto: UpdateProductDto): Promise<Product> {
+    return await this.productRepository.save(updateProductDto);
   }
 
   remove(id: number) {

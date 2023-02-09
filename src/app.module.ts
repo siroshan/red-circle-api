@@ -6,9 +6,13 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { CartsModule } from './carts/carts.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
     ProductsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',

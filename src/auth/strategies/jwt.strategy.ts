@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -17,8 +18,21 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       // from the front end we send the
       // token in header as BearerToken
-      jwtFromRequest: ExtractJwt.fromHeader('AUTH_TOKEN'),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        JwtStrategy.extractJwtFromCookie,
+      ]),
     });
+  }
+
+  private static extractJwtFromCookie(req: Request): string | null {
+    if (
+      req.cookies &&
+      'AUTH_TOKEN' in req.cookies &&
+      req.cookies['AUTH_TOKEN'].length > 0
+    ) {
+      return req.cookies['AUTH_TOKEN'];
+    }
+    return null;
   }
 
   async validate(payload: JwtPayload): Promise<User> {

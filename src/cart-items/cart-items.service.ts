@@ -13,7 +13,6 @@ export class CartItemsService {
   constructor(
     @InjectRepository(CartItem)
     private readonly cartItemRepository: Repository<CartItem>,
-    private readonly productService: ProductsService,
   ) {}
 
   async create(cart: Cart, product: Product, qty: number): Promise<CartItem> {
@@ -25,8 +24,8 @@ export class CartItemsService {
     return await this.cartItemRepository.save(newCartItem);
   }
 
-  findAll() {
-    return `This action returns all cartItems`;
+  async findAll() {
+    return await this.cartItemRepository.find();
   }
 
   findOne(id: string) {

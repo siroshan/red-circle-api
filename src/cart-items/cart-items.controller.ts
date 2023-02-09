@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { Public } from 'src/auth/decorators/public.decorator';
 import { CartItemsService } from './cart-items.service';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
@@ -20,6 +21,7 @@ export class CartItemsController {
   //   return this.cartItemsService.create(createCartItemDto);
   // }
 
+  @Public()
   @Get()
   findAll() {
     return this.cartItemsService.findAll();

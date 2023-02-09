@@ -24,6 +24,4 @@ export class CreateUserDto {
     message: 'password is too weak',
   })
   password: string;
-
-  readonly isDeleted: boolean;
 }

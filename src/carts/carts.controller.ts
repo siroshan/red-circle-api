@@ -8,6 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Public } from 'src/auth/decorators/public.decorator';
 import { CartItemsService } from 'src/cart-items/cart-items.service';
 import { CreateCartItemDto } from 'src/cart-items/dto/create-cart-item.dto';
 import { CartItem } from 'src/cart-items/entities/cart-item.entity';
@@ -34,9 +35,16 @@ export class CartsController {
     );
     return this.cartsService.create(product, createCartDto.qty, user);
   }
+
+  @Public()
   @Get()
   findAll() {
     return this.cartsService.findAll();
+  }
+
+  @Get('/my-cart')
+  findByUser(@GetUser() user: User) {
+    return this.cartsService.findByUser(user);
   }
 
   @Get(':id')
@@ -66,6 +74,7 @@ export class CartsController {
   //   return this.cartsService.update(id, updateCartDto);
   // }
 
+  @Public()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.cartsService.remove(id);

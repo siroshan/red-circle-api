@@ -36,7 +36,14 @@ export class UsersService {
     return await this.userRepository.save(newuser);
   }
 
-  async findOneByEmail(email: string): Promise<User> {
+  async findOneByEmail(email: string, isPassword = false): Promise<User> {
+    if (isPassword) {
+      return await this.userRepository
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .where('user.email= :email', { email: email })
+        .getOne();
+    }
     return await this.userRepository.findOneBy({ email });
   }
 

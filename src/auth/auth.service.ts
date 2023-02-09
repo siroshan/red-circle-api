@@ -6,7 +6,8 @@ import { User } from 'src/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { AuthCredentailsDto } from './dto/auth-credentials.dto';
 import { Response } from 'express';
-import moment from 'moment';
+import * as moment from 'moment';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -16,7 +17,7 @@ export class AuthService {
 
   // here we retrieve the user and validate
   async validateUser(email: string, password: string): Promise<any> {
-    const user = (await this.usersService.findOneByEmail(email)) as any;
+    const user = (await this.usersService.findOneByEmail(email, true)) as any;
     if (user && (await bcrypt.compare(password, user.password))) {
       return {
         id: user.id,

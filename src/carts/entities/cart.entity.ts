@@ -14,7 +14,7 @@ export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => User, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, (user) => user.cart, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 
@@ -22,6 +22,5 @@ export class Cart {
     eager: true,
     cascade: true,
   })
-  @Column()
-  cartItem: CartItem[];
+  cartItems: CartItem[];
 }

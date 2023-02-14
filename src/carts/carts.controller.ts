@@ -28,13 +28,13 @@ export class CartsController {
     private readonly cartItemService: CartItemsService,
   ) {}
 
-  @Post()
-  async create(@Body() createCartDto: CreateCartDto, @GetUser() user: User) {
-    const product: Product = await this.productService.findOne(
-      createCartDto.productID,
-    );
-    return this.cartsService.create(product, createCartDto.qty, user);
-  }
+  // @Post()
+  // async create(@Body() createCartDto: CreateCartDto, @GetUser() user: User) {
+  //   const product: Product = await this.productService.findOne(
+  //     createCartDto.productID,
+  //   );
+  //   return this.cartsService.create(product, createCartDto.qty, user);
+  // }
 
   @Public()
   @Get()
@@ -61,6 +61,13 @@ export class CartsController {
     const product: Product = await this.productService.findOne(
       createCartItemDto.productID,
     );
+    if (!cart) {
+      return await this.cartsService.create(
+        product,
+        createCartItemDto.qty,
+        user,
+      );
+    }
     const cartItem: CartItem = await this.cartItemService.create(
       cart,
       product,
@@ -68,11 +75,6 @@ export class CartsController {
     );
     return await this.cartsService.addProductToCart(cart, cartItem);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-  //   return this.cartsService.update(id, updateCartDto);
-  // }
 
   @Public()
   @Delete(':id')

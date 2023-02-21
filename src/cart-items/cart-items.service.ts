@@ -28,8 +28,12 @@ export class CartItemsService {
     return await this.cartItemRepository.find();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} cartItem`;
+  async findOne(id: string) {
+    return await this.cartItemRepository.findOneBy({ id });
+  }
+
+  async updateQty(id: string, qty: number) {
+    return await this.cartItemRepository.update(id, { qty });
   }
 
   // async update(updateCartItemDto: UpdateCartItemDto) {

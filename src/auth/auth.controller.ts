@@ -6,6 +6,7 @@ import { AuthCredentailsDto } from './dto/auth-credentials.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { Response } from 'express';
+import { GetUser } from './decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -28,6 +29,16 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDto, response);
+  }
+
+  @Post('/signout')
+  signOut(@Res({ passthrough: true }) response: Response): boolean {
+    return this.authService.signOut(response);
+  }
+
+  @Post('/checkAuth')
+  CheckAuth(@GetUser() user: User) {
+    return user;
   }
 
   @Public()

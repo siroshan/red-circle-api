@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { Public } from 'src/auth/decorators/public.decorator';
@@ -74,6 +75,24 @@ export class CartsController {
       createCartItemDto.qty,
     );
     return await this.cartsService.addProductToCart(cart, cartItem);
+  }
+
+  @Patch('/remove/:cartItemID')
+  async removeProductFromCart(
+    @Param() cartItemID: string,
+    @GetUser() user: User,
+  ) {
+    const cart: Cart = await this.cartsService.findByUser(user);
+    return await this.cartItemService.remove(cartItemID);
+  }
+
+  @Patch('/updateQty/:cartItemID')
+  async updateQty(
+    @Param() cartItemID: string,
+    @Query() qty: number,
+    @GetUser() user: User,
+  ) {
+    return await this.cartItemService.updateQty(cartItemID, qty);
   }
 
   @Public()

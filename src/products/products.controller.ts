@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -26,6 +27,16 @@ export class ProductsController {
   @Get()
   findAll(): Promise<Product[]> {
     return this.productsService.findAll();
+  }
+
+  @Public()
+  @Get('/search')
+  searchProduct(
+    @Query('searchQuery') searchQuery: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ): Promise<{ products: Product[]; count: number }> {
+    return this.productsService.searchProduct(searchQuery, take, skip);
   }
 
   @Public()

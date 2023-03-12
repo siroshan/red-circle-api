@@ -8,22 +8,14 @@ import { CartsModule } from './carts/carts.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
 
 @Module({
   imports: [
+    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     ProductsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'red-circle',
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
     UsersModule,
     CartsModule,
     CartItemsModule,

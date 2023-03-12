@@ -1,5 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum WineType {
+  RED = 'red',
+  WHITE = 'white',
+  SPARKLING = 'saprkling',
+  DESSERT = 'dessert',
+}
+
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -8,8 +15,8 @@ export class Product {
   @Column()
   name: string;
 
-  @Column()
-  type: string;
+  @Column({ type: 'enum', enum: WineType })
+  type: WineType;
 
   @Column()
   description: string;

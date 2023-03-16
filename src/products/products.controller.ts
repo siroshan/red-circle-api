@@ -33,10 +33,20 @@ export class ProductsController {
   @Get('/search')
   searchProduct(
     @Query('searchQuery') searchQuery: string,
-    @Query('skip') skip: number,
     @Query('take') take: number,
-  ): Promise<{ products: Product[]; count: number }> {
-    return this.productsService.searchProduct(searchQuery, take, skip);
+    @Query('skip') skip: number,
+    @Query('type') type: string,
+    @Query('gt') gt: number,
+    @Query('lt') lt: number,
+  ): Promise<{ result: Product[]; count: number }> {
+    return this.productsService.searchProduct(
+      searchQuery,
+      take,
+      skip,
+      type,
+      gt,
+      lt,
+    );
   }
 
   @Public()

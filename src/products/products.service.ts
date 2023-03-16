@@ -25,26 +25,33 @@ export class ProductsService {
     return await this.productRepository.findOneBy({ id });
   }
 
-  async searchProduct(searchQuery: string, take = 10, skip = 0) {
+  async searchProduct(
+    searchQuery: string,
+    take = 10,
+    skip = 0,
+    type: string,
+    gt: number,
+    lt: number,
+  ) {
+    const query = this.productRepository.createQueryBuilder('product');
     if (searchQuery) {
-      const [result, total] = await this.productRepository.findAndCount({
-        where: { name: ILike('%' + searchQuery + '%') },
-        order: { id: 'DESC' },
-        take,
-        skip,
+      query.where('product.name ILIKE :searchQuery', {
+        searchQuery: `%${searchQuery}%`,
       });
-      return {
-        products: result,
-        count: total,
-      };
     }
-    const [result, total] = await this.productRepository.findAndCount({
-      order: { id: 'DESC' },
-      take,
-      skip,
-    });
+    if (type && type != 'all') {
+      query.where('product.type = :type', { type });
+    }
+    if (gt) {
+      query.where('product.price >= :gt', { gt });
+    }
+    if (lt) {
+      query.where('product.price <= :lt', { lt });
+    }
+    const [result, total] = await query.take(take).skip(skip).getManyAndCount();
+
     return {
-      products: result,
+      result: result,
       count: total,
     };
   }

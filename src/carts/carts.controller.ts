@@ -79,7 +79,7 @@ export class CartsController {
 
   @Patch('/remove/:cartItemID')
   async removeProductFromCart(
-    @Param() cartItemID: string,
+    @Param('cartItemID') cartItemID: string,
     @GetUser() user: User,
   ) {
     const cart: Cart = await this.cartsService.findByUser(user);
@@ -88,8 +88,8 @@ export class CartsController {
 
   @Patch('/updateQty/:cartItemID')
   async updateQty(
-    @Param() cartItemID: string,
-    @Query() qty: number,
+    @Param('cartItemID') cartItemID: string,
+    @Query('qty') qty: number,
     @GetUser() user: User,
   ) {
     return await this.cartItemService.updateQty(cartItemID, qty);
